@@ -2,7 +2,7 @@ use crate::activation;
 use crate::array::one_hot;
 use crate::dataset::read;
 use crate::perceptron::{self, MLP};
-use crate::trainer::Trainner;
+use crate::trainer::Trainer;
 use ndarray::prelude::*;
 use ndarray::Array;
 use rand::Rng;
@@ -18,7 +18,8 @@ fn train_read() {
     let mlp = MLP::new().push(layer1).push(layer2);
 
     const ALPHA: f64 = 0.3;
-    let mut t: Trainner = Trainner::new(mlp, ALPHA, 300);
+    const EPOCHS: u32 = 150;
+    let mut t: Trainer = Trainer::new(mlp, ALPHA, EPOCHS);
     t.train(&input, &input_labels);
 }
 
@@ -42,7 +43,7 @@ fn train() {
     let mlp = MLP::new().push(layer1).push(layer2);
 
     const ALPHA: f64 = 0.01;
-    let mut t: Trainner = Trainner::new(mlp, ALPHA, 10);
+    let mut t: Trainer = Trainer::new(mlp, ALPHA, 10);
     t.train(&input, &input_labels);
 }
 
@@ -64,7 +65,7 @@ fn accuracy() {
     .t()
     .to_owned();
 
-    assert_eq!(Trainner::accuracy(&prediction, &labels), 1.0);
+    assert_eq!(Trainer::accuracy(&prediction, &labels), 1.0);
 }
 
 #[test]
@@ -87,7 +88,7 @@ fn accuracy_50() {
     .t()
     .to_owned();
 
-    assert_eq!(Trainner::accuracy(&prediction, &labels), 0.5);
+    assert_eq!(Trainer::accuracy(&prediction, &labels), 0.5);
 }
 
 #[test]
@@ -110,7 +111,7 @@ fn accuracy_25() {
     .t()
     .to_owned();
 
-    assert_eq!(Trainner::accuracy(&prediction, &labels), 0.25);
+    assert_eq!(Trainer::accuracy(&prediction, &labels), 0.25);
 }
 
 #[test]
@@ -132,7 +133,7 @@ fn accuracy_real() {
     let labels_onehot = one_hot(&labels, 10);
     println!("labels onehot: {:?}", labels_onehot);
 
-    assert_eq!(Trainner::accuracy(&prediction, &labels_onehot), 1.0);
+    assert_eq!(Trainer::accuracy(&prediction, &labels_onehot), 1.0);
 }
 
 #[test]
@@ -150,7 +151,7 @@ fn test_backpropagation_1() {
     let mlp = MLP::new().push(layer1).push(layer2);
 
     const ALPHA: f64 = 1.0;
-    let mut t: Trainner = Trainner::new(mlp, ALPHA, 1);
+    let mut t: Trainer = Trainer::new(mlp, ALPHA, 1);
     t.train(&input, &input_labels);
 
     assert_eq!(array![[-8.0, -17.0]], t.mlp.layers[0].weights);
@@ -175,6 +176,6 @@ fn test_backpropagation_2() {
     let mlp = MLP::new().push(layer1).push(layer2);
 
     const ALPHA: f64 = 1.0;
-    let mut t: Trainner = Trainner::new(mlp, ALPHA, 10);
+    let mut t: Trainer = Trainer::new(mlp, ALPHA, 10);
     t.train(&input, &input_labels);
 }

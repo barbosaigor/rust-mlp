@@ -7,13 +7,13 @@ use ndarray::Array;
 use ndarray::ShapeBuilder;
 use std::usize;
 
-pub struct Trainner {
+pub struct Trainer {
     pub mlp: MLP,
     pub alpha: f64,
     pub epochs: u32,
 }
 
-impl Trainner {
+impl Trainer {
     pub fn new(mlp: MLP, alpha: f64, epochs: u32) -> Self {
         Self { mlp, alpha, epochs }
     }
